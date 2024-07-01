@@ -26,15 +26,16 @@ class CommentArea extends Component {
           throw new Error("Errore nel reperimento del commento");
         }
       })
-      .then(libri => {
-        console.log(libri);
-        this.setState({ comments: libri });
+      .then(comLibro => {
+        console.log(comLibro);
+        this.setState({ comments: comLibro });
       })
       .catch(err => alert(err));
   };
   componentDidMount() {
     this.fetchGetComments();
   }
+  
   render() {
     return (
       <div>

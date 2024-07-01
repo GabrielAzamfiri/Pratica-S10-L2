@@ -20,7 +20,7 @@ class CommentsList extends Component {
         return (
             <div>
                 {this.props.comments.map((comment, index) => (
-                    <SingleComment comment={comment}/>
+                    <SingleComment comment={comment} key={comment._id}/>
                 ))}
             </div>
             
