@@ -1,35 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Component } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
+import TopBar from "./components/TopBar";
+import MyFooter from "./components/MyFooter";
+import Welcome from "./components/Welcome";
+import BookList from "./components/BookList";
 
-function App() {
-  const [count, setCount] = useState(0)
+// **************file di libri****************
+import fantasy from "../src/data/books/fantasy.json";
+import horror from "../src/data/books/horror.json"
+import history from "../src/data/books/history.json"
+import scifi from "../src/data/books/scifi.json"
+import romance from "../src/data/books/romance.json"
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+class App extends Component {
+  state = {
+    categoria: "fantasy",
+    horror:[...horror],
+    history:[...history] ,
+    scifi: [...scifi],
+    fantasy:[...fantasy],
+    romance:[...romance] 
+  };
+  
+  // funzione che modifica lo state categoria grazie al eventKey
+  selectCategory = eventKey => {
+   this.setState({ categoria: eventKey })
+   };
+  render() {
+    return (
+      <div className="App">
+        {/* do la funzione selectCategory come props cosi da chiamarla dentro TopBar e farle avere eventKey come dato */}
+        <TopBar setCategory={this.selectCategory} />
+        <Welcome category={this.state.categoria}/>
+        {/* passo come props lo state.catogoria cosi da avere l'array di film in base alla selezione del dropdown */}
+        <BookList category={this.state[this.state.categoria]} />
+        <MyFooter />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    );
+  }
 }
 
-export default App
+export default App;
