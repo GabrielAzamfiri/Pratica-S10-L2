@@ -31,7 +31,7 @@ class AddComment extends Component {
     })
       .then(resp => {
         if (resp.ok) {
-          
+          this.props.reloadComments()
           this.setState({
             comment: {
             
@@ -39,18 +39,31 @@ class AddComment extends Component {
               createdAt: "",
               elementId: this.props.idBook,
               rate: 1,
-              updatedAt: "",
-              __v: 0,
-              _id: "",
+              
+             
             },
           });
+         
           alert("Commento aggiunto con successo!");
+        
         } else {
           throw new Error("Error fetching data");
         }
       })
       .catch(err => alert(err));
   };
+  componentDidUpdate(prevProps){
+    if(prevProps.idBook!== this.props.idBook){
+      this.setState({comment: {
+      
+        comment: "",
+        createdAt: "",
+        elementId: this.props.idBook,
+        rate: 1,
+      
+      }});
+    }
+  }
 
   render() {
     return (

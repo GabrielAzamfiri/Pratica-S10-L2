@@ -6,26 +6,20 @@ import CommentArea from "./CommentArea";
 class BookList extends Component {
   state = {
     ricerca: "",
-    selected:false,
+   
     selectedBook:""
 
   };
   selezionato = (selectedbook) => {
-    this.setState({ selected: !this.state.selected, selectedBook: selectedbook});
+    this.setState({  selectedBook: selectedbook});
   };
 
-  // componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState) {
     
-  //   console.log("PREV props", prevState.selectedBook);
-  //   console.log("THIS props", this.state.selectedBook);
-  //   if (prevState.selectedBook !== this.state.selectedBook) {
-  //     this.setState({ selected: true })
-  //   } else {
-  //     // se siamo qui è probabilmente per via di un setState avviato dentro this.fetchMoviesData che scatena un nuovo update,
-  //     // ma rispetto a prima le props non saranno diverse questa volta e quindi abbiamo lo STOP.
-  //     this.setState({ selected: !this.state.selected})
-  //   }
-  // }
+    console.log("PREV props", prevState.selectedBook);
+    console.log("THIS props", this.state.selectedBook);
+   
+  }
   render() {
     return (
       <Container>
@@ -44,12 +38,12 @@ class BookList extends Component {
                 .map(book => {
                   // la condizione passa anche con stringa vuota.. quindi non serve mettere un ? con le 2 condizioni
                   // farà sempre un map su array pieno o array filtrato
-                  return <SingleBook book={book} key={book.asin} selected={this.selezionato}/>;
+                  return <SingleBook book={book} key={book.asin} selected={this.selezionato} selectedStile={this.state.selectedBook===book}/>;
                 })}
             </Row>
           </Col>
           <Col md={6}>
-          {this.state.selected && <CommentArea idBook={this.state.selectedBook.asin}/>}
+          {this.state.selectedBook && <CommentArea idBook={this.state.selectedBook.asin} selectedBook={this.state.selectedBook}/>}
           </Col>
         </Row>
       </Container>

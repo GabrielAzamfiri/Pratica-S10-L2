@@ -1,7 +1,7 @@
 import { Component } from "react";
 import CommentsList from "./CommentsList";
 import AddComment from "./AddComment";
-
+import StickyBox from "react-sticky-box";
 
 class CommentArea extends Component {
   state = {
@@ -35,19 +35,31 @@ class CommentArea extends Component {
   componentDidMount() {
     this.fetchGetComments();
   }
-  
+  componentDidUpdate(prevProps) {
+    console.log("PREV props", prevProps.idBook);
+    console.log("THIS props", this.props.idBook);
+    if (prevProps.idBook !== this.props.idBook) {
+      this.fetchGetComments();
+    } else {
+      // se siamo qui è probabilmente per via di un setState avviato dentro this.fetchGetComments che scatena un nuovo update,
+      // ma rispetto a prima le props non saranno diverse questa volta e quindi abbiamo lo STOP.
+      console.log("no new props, STOP!");
+    }
+  }
   render() {
     return (
-      <div>
-        <h2> Commenti </h2>
-        <CommentsList comments={this.state.comments} />
-        <AddComment idBook={this.props.idBook}/>
-      </div>
+
+      <StickyBox offsetTop={20} offsetBottom={20}>
+        <div className="">
+          <h2>Recensioni del libro <span className="text-info">{this.props.selectedBook.title}</span> </h2>
+        
+          <CommentsList comments={this.state.comments} reloadComments={this.fetchGetComments}/>
+          <AddComment idBook={this.props.idBook} reloadComments={this.fetchGetComments}/>
+        </div>
+      </StickyBox>
 
       //   <CommentsList comments={this.state.comments}/>
       //   {/* <AddComment/> */}
-
-     
     );
   }
 }

@@ -1,12 +1,10 @@
 import { Component } from "react";
 import SingleComment from "./SingleComment";
+import { Alert } from "react-bootstrap";
 
 
 class CommentsList extends Component {
-    state = {
-        comments: []
-    };
-
+    
     // author:     "ciaocaro@caro.caro"
     // comment: "130 Martin Garrix si vola"
     // createdAt : "2024-01-26T10:53:21.282Z"
@@ -18,11 +16,14 @@ class CommentsList extends Component {
 
     render() {
         return (
-            <div>
-                {this.props.comments.map((comment, index) => (
-                    <SingleComment comment={comment} key={comment._id}/>
-                ))}
-            </div>
+           
+                this.props.comments.length > 0 ? this.props.comments.map((comment) => (
+                    <SingleComment comment={comment} key={comment._id} reloadComments={this.props.reloadComments}/>
+                )) : <Alert key="info" variant="info">
+                Non ci sono recensioni per questo libro!
+              </Alert>
+                
+       
             
         );
     }

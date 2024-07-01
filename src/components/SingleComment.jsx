@@ -4,6 +4,7 @@ import { Trash3 } from "react-bootstrap-icons";
 
 class SingleComment extends Component {
   deleteComment = async () => {
+    
     try {
       const resp = await fetch("https://striveschool-api.herokuapp.com/api/comments/" + this.props.comment._id, {
         method: "DELETE",
@@ -16,7 +17,7 @@ class SingleComment extends Component {
       if (resp.ok) {
         // qui dentro, sicuri di aver già eliminato l'elemento, chiameremo di nuovo la funzione fetchReservations che chiederà al server l'array aggiornato,
         // salvandolo di conseguenza come nuovo this.state.reservations
-
+        this.props.reloadComments()
         const deletedObj = await resp.json();
         alert("abbiamo eliminato la prenotazione di: " + deletedObj.author);
       } else {
