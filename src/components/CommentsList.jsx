@@ -1,9 +1,9 @@
-import { Component } from "react";
+
 import SingleComment from "./SingleComment";
 import { Alert } from "react-bootstrap";
 
 
-class CommentsList extends Component {
+const  CommentsList =(props)=> {
     
     // author:     "ciaocaro@caro.caro"
     // comment: "130 Martin Garrix si vola"
@@ -14,11 +14,11 @@ class CommentsList extends Component {
     // __v :   0
     // _id  :   "65b38f2131a73f0019d5c802"
 
-    render() {
+   
         return (
            
-                this.props.comments.length > 0 ? this.props.comments.map((comment) => (
-                    <SingleComment comment={comment} key={comment._id} reloadComments={this.props.reloadComments}/>
+                props.comments.length > 0 ? props.comments.map((comment) => (
+                    <SingleComment comment={comment} key={comment._id} reloadComments={props.reloadComments}/>
                 )) : <Alert key="info" variant="info">
                 Non ci sono recensioni per questo libro!
               </Alert>
@@ -27,5 +27,5 @@ class CommentsList extends Component {
             
         );
     }
-}
+
 export default CommentsList

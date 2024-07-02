@@ -1,17 +1,18 @@
-import { Component } from "react";
+import { useEffect, useState } from "react";
 import CommentsList from "./CommentsList";
 import AddComment from "./AddComment";
 import StickyBox from "react-sticky-box";
+import { Spinner } from "react-bootstrap";
 
-class CommentArea extends Component {
-  state = {
-    comments: [],
-    isLoading: false,
-  };
-  fetchGetComments = async () => {
-    this.setState({ isLoading: true });
+const CommentArea = props => {
+  
+  const [comments, setComments] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-    fetch("https://striveschool-api.herokuapp.com/api/comments/" + this.props.idBook, {
+  const fetchGetComments = async () => {
+    setIsLoading(true);
+
+    fetch("https://striveschool-api.herokuapp.com/api/comments/" + props.idBook, {
       headers: {
         // chiave di autenticazione
         Authorization:
@@ -28,39 +29,29 @@ class CommentArea extends Component {
       })
       .then(comLibro => {
         console.log(comLibro);
-        this.setState({ comments: comLibro });
+        setComments(comLibro);
+        setIsLoading(false);
       })
       .catch(err => alert(err));
   };
-  componentDidMount() {
-    this.fetchGetComments();
-  }
-  componentDidUpdate(prevProps) {
-    console.log("PREV props", prevProps.idBook);
-    console.log("THIS props", this.props.idBook);
-    if (prevProps.idBook !== this.props.idBook) {
-      this.fetchGetComments();
-    } else {
-      // se siamo qui è probabilmente per via di un setState avviato dentro this.fetchGetComments che scatena un nuovo update,
-      // ma rispetto a prima le props non saranno diverse questa volta e quindi abbiamo lo STOP.
-      console.log("no new props, STOP!");
-    }
-  }
-  render() {
-    return (
 
-      <StickyBox offsetTop={20} offsetBottom={20}>
-        <div className="">
-          <h2>Recensioni del libro <span className="text-info">{this.props.selectedBook.title}</span> </h2>
-        
-          <CommentsList comments={this.state.comments} reloadComments={this.fetchGetComments}/>
-          <AddComment idBook={this.props.idBook} reloadComments={this.fetchGetComments}/>
-        </div>
-      </StickyBox>
+  useEffect(() => {
+    fetchGetComments();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.idBook]);
 
-      //   <CommentsList comments={this.state.comments}/>
-      //   {/* <AddComment/> */}
-    );
-  }
-}
+  return (
+    <StickyBox offsetTop={20} offsetBottom={20}>
+      <div className="">
+        <h2>
+          Recensioni del libro <span className="text-info">{props.selectedBook.title}</span>{" "}
+        </h2>
+        {isLoading && <Spinner animation="border" role="status" variant="info"></Spinner>}
+        <CommentsList comments={comments} reloadComments={fetchGetComments} />
+        <AddComment idBook={props.idBook} reloadComments={fetchGetComments} />
+      </div>
+    </StickyBox>
+  );
+};
+
 export default CommentArea;

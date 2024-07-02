@@ -1,12 +1,12 @@
-import { Component } from "react";
+
 import { Button } from "react-bootstrap";
 import { Trash3 } from "react-bootstrap-icons";
 
-class SingleComment extends Component {
-  deleteComment = async () => {
+const SingleComment =(props)=> {
+  const deleteComment = async () => {
     
     try {
-      const resp = await fetch("https://striveschool-api.herokuapp.com/api/comments/" + this.props.comment._id, {
+      const resp = await fetch("https://striveschool-api.herokuapp.com/api/comments/" + props.comment._id, {
         method: "DELETE",
         headers: {
           // chiave di autenticazione
@@ -17,7 +17,7 @@ class SingleComment extends Component {
       if (resp.ok) {
         // qui dentro, sicuri di aver già eliminato l'elemento, chiameremo di nuovo la funzione fetchReservations che chiederà al server l'array aggiornato,
         // salvandolo di conseguenza come nuovo this.state.reservations
-        this.props.reloadComments()
+        props.reloadComments()
         const deletedObj = await resp.json();
         alert("abbiamo eliminato la prenotazione di: " + deletedObj.author);
       } else {
@@ -27,17 +27,17 @@ class SingleComment extends Component {
       console.log(err);
     }
   };
-  render() {
+
     return (
       <div className="border border-info ">
         <p>
-          <strong>Comment:</strong> {this.props.comment.comment}
+          <strong>Comment:</strong> {props.comment.comment}
         </p>
         <div className="d-flex justify-content-between align-items-center">
           <p>
-            <strong>Rate:</strong> {this.props.comment.rate}
+            <strong>Rate:</strong> {props.comment.rate}
           </p>
-          <Button variant="danger" size="sm" onClick={this.deleteComment}>
+          <Button variant="danger" size="sm" onClick={deleteComment}>
             {/* icona di react-bootstrap-icons */}
             <Trash3 />
           </Button>
@@ -45,5 +45,5 @@ class SingleComment extends Component {
       </div>
     );
   }
-}
+
 export default SingleComment;
